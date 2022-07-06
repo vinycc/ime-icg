@@ -1,0 +1,312 @@
+<!-- UNIVERSIDADE DE SÃO PAULO -->
+<!-- INSTITUTO DE MATEMÁTICA E ESTATÍSTICA -->
+<!-- Desenvolvimento de Sistemas Web para Apoio ao Ensino/Aprendizagem -->
+<!-- 11355021 - Paulo Viniccius Vieira -->
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<title>Introdução a Computação</title>
+		<link rel="stylesheet"
+		      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+					integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+					crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script type="text/javascript" src="js/run.js"></script>
+		<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+
+		<!-- highlight-within-textarea CSS/JS -->
+		<link href="css/jquery.highlight-within-textarea.css" rel="stylesheet"  type="text/css">
+		<script type="text/javascript" src="js/jquery.highlight-within-textarea.js"></script>
+
+		<!-- custom styles for highlight-within-textarea -->
+		<style>
+
+			#textAreaExecutavel{
+				padding: 0;
+			}
+			.hwt-content mark {
+				border-radius: 3px;
+				background-color: #d0bfff;
+
+			}
+
+			.hwt-content mark.red {
+				background-color: #ffc9c9;
+			}
+
+			.hwt-content mark.blue {
+				background-color: #a3daff;
+			}
+
+			.hwt-content mark.yellow {
+				background-color: #ffec99;
+			}
+		</style>
+
+
+	</head>
+
+  <body class="bg-light">
+		<!-- Image and text -->
+		<nav class="navbar fixed-top navbar-dark bg-dark">
+			<a class="navbar-brand text-light" href="#">
+				iCG - Princípios da Computação - iMática
+			</a>
+			<a class="navbar-brand text-light" href="#">
+				Ajuda
+	  		</a>
+		</nav>
+		
+		<main role="main" class="container">
+
+			<div class="btn-toolbar media text-muted pt-3 margin" role="toolbar" aria-label="Toolbar com grupos de botões">
+				
+				
+				<div class="btn-group mr-2" role="group" aria-label="Terceiro grupo">
+					<select name="cars" id="comboExemplos" class="btn btn-primary" onchange="SelectExample()" >
+						<option value="ex00">Exemplos:</option>
+						<option value="ex01">soma 2 + 3</option>
+						<option value="ex02">Fatorial de um número</option>
+					  </select>
+				</div>
+				
+				<div class="btn-group mr-2" role="group" aria-label="Primeiro grupo" style="opacity: 0.6;">
+					<button type="button" id="btCompile" onclick="LoadAssembly()" class="btn btn-primary">Compilar</button>
+				</div>
+				<div class="btn-group mr-2" role="group" aria-label="Terceiro grupo">
+					<button type="button" OnClick="UpdateMemory()" class="btn btn-primary">Atualizar</button>
+				</div> 
+				<div class="btn-group mr-2" role="group" aria-label="Segundo grupo">
+					<button type="button" OnClick="Emulate();" id="btEmulate" class="btn btn-primary">Emular</button>
+				</div>
+				<div class="btn-group mr-2" role="group" aria-label="Terceiro grupo">
+					<button type="button" OnClick="EmulateStepByStep();" class="btn btn-primary">Emular Passo a Passo</button>
+				</div>
+				<div class="btn-group mr-2" role="group" aria-label="Terceiro grupo" style="opacity: 0.6;">
+					<button type="button"  onclick="alert('Funcionalidade não Implementada')" class="btn btn-primary">Gabarito</button>
+				</div>
+				<div class="btn-group mr-2" role="group" aria-label="Terceiro grupo" style="opacity: 0.6;">
+					<button type="button" onclick="alert('Funcionalidade não Implementada')" class="btn btn-primary">Enviar</button>
+				</div>
+				
+			</div>
+
+      	<div class="container">
+          <div class="row" id="block">
+			
+			<div class="col-sm-4 col-md-4 col-lg-4 col-xs-5 ui-widget">
+				<div id="divConsole">
+					<label>Compilador</label>
+					<textarea class="form-control" name="Compilador" id="textAreaCompilador" rows="8" cols="80" placeholder="Digite seu código aqui"></textarea>
+
+					<label>Console</label>
+					<textarea class="form-control" name="Console" id="textAreaConsole" rows="4" cols="80" placeholder="Aqui virão as mensagens. Digite seu programa no campo 'Compilador'"></textarea>
+				</div>
+
+				<form>
+					<div id="divAcumulador" class="form-row">
+						<div class="form-group col-sm-offset-1">
+							<label>Instrução</label>
+							<input type="text" id="Instrucao" class="form-control" placeholder="instruções">
+						</div>
+								
+						<div class="form-group col-sm-offset-1 col-sm-6">
+							<label>Acumulador</label>
+					  		<input type="text" id="Acumulador" class="form-control" placeholder="<acumulador>">
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div id="divSaida" class="form-group  col-sm-offset-1">
+							<label>Saida</label>
+			        		<input type="text" id="Saida" class="form-control" placeholder="<saída>">
+						</div>
+									
+						<div class="form-group col-sm-offset-1 col-sm-4">
+							<label>Entrada</label>
+							<input type="text" id="Entrada" class="form-control" placeholder="Digite um valor">
+						</div>
+						
+						<div class="form-group col-sm-offset-1 col-sm-2 d-flex flex-column">
+							<button type="button" id="btEntrada" onclick="inputValue()" class="form-control btn btn-primary mt-auto">OK</button>
+						</div>
+
+					</div>
+				</form>
+            </div>
+			
+			<div id="divMEM" class="table-responsive-sm">
+              <table class="table table-bordered" id="tableMem">
+    						<thead class="thead-light">
+    							<tr>
+    								<th class="text-center h-auto" scope="col">#</th>
+    								<th class="text-center" scope="col">0</th>
+    								<th class="text-center" scope="col">1</th>
+    								<th class="text-center" scope="col">2</th>
+    								<th class="text-center" scope="col">3</th>
+    								<th class="text-center" scope="col">4</th>
+    								<th class="text-center" scope="col">5</th>
+    								<th class="text-center" scope="col">6</th>
+    								<th class="text-center" scope="col">7</th>
+    								<th class="text-center" scope="col">8</th>
+    								<th class="text-center" scope="col">9</th>
+    							</tr>
+    						</thead>
+    						<tbody>
+    							<tr>
+    								<th class="text-center" scope="row">0</th>
+    								<td id="mem00" class="text-center ui-state-default">00000</td>
+    								<td id="mem01" class="text-center">00000</td>
+    								<td id="mem02" class="text-center">00000</td>
+    								<td id="mem03" class="text-center">00000</td>
+    								<td id="mem04" class="text-center">00000</td>
+    								<td id="mem05" class="text-center">00000</td>
+    								<td id="mem06" class="text-center">00000</td>
+    								<td id="mem07" class="text-center">00000</td>
+    								<td id="mem08" class="text-center">00000</td>
+    								<td id="mem09" class="text-center">00000</td>
+    							</tr>
+    							<tr>
+    								<th scope="row">1</th>
+    								<td id="mem10" class="text-center">00000</td>
+    								<td id="mem11" class="text-center">00000</td>
+    								<td id="mem12" class="text-center">00000</td>
+    								<td id="mem13" class="text-center">00000</td>
+    								<td id="mem14" class="text-center">00000</td>
+    								<td id="mem15" class="text-center">00000</td>
+    								<td id="mem16" class="text-center">00000</td>
+    								<td id="mem17" class="text-center">00000</td>
+    								<td id="mem18" class="text-center">00000</td>
+    								<td id="mem19" class="text-center">00000</td>
+    							</tr>
+    							<tr>
+    								<th scope="row">2</th>
+									<td id="mem20" class="text-center">00000</td>
+									<td id="mem21" class="text-center">00000</td>
+									<td id="mem22" class="text-center">00000</td>
+									<td id="mem23" class="text-center">00000</td>
+									<td id="mem24" class="text-center">00000</td>
+									<td id="mem25" class="text-center">00000</td>
+									<td id="mem26" class="text-center">00000</td>
+									<td id="mem27" class="text-center">00000</td>
+									<td id="mem28" class="text-center">00000</td>
+									<td id="mem29" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">3</th>
+    								<td id="mem30" class="text-center">00000</td>
+									<td id="mem31" class="text-center">00000</td>
+									<td id="mem32" class="text-center">00000</td>
+									<td id="mem33" class="text-center">00000</td>
+									<td id="mem34" class="text-center">00000</td>
+									<td id="mem35" class="text-center">00000</td>
+									<td id="mem36" class="text-center">00000</td>
+									<td id="mem37" class="text-center">00000</td>
+									<td id="mem38" class="text-center">00000</td>
+									<td id="mem39" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">4</th>
+    							<td id="mem40" class="text-center">00000</td>
+									<td id="mem41" class="text-center">00000</td>
+									<td id="mem42" class="text-center">00000</td>
+									<td id="mem43" class="text-center">00000</td>
+									<td id="mem44" class="text-center">00000</td>
+									<td id="mem45" class="text-center">00000</td>
+									<td id="mem46" class="text-center">00000</td>
+									<td id="mem47" class="text-center">00000</td>
+									<td id="mem48" class="text-center">00000</td>
+									<td id="mem49" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">5</th>
+    							<td id="mem50" class="text-center">00000</td>
+									<td id="mem51" class="text-center">00000</td>
+									<td id="mem52" class="text-center">00000</td>
+									<td id="mem53" class="text-center">00000</td>
+									<td id="mem54" class="text-center">00000</td>
+									<td id="mem55" class="text-center">00000</td>
+									<td id="mem56" class="text-center">00000</td>
+									<td id="mem57" class="text-center">00000</td>
+									<td id="mem58" class="text-center">00000</td>
+									<td id="mem59" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">6</th>
+    							<td id="mem60" class="text-center">00000</td>
+									<td id="mem61" class="text-center">00000</td>
+									<td id="mem62" class="text-center">00000</td>
+									<td id="mem63" class="text-center">00000</td>
+									<td id="mem64" class="text-center">00000</td>
+									<td id="mem65" class="text-center">00000</td>
+									<td id="mem66" class="text-center">00000</td>
+									<td id="mem67" class="text-center">00000</td>
+									<td id="mem68" class="text-center">00000</td>
+									<td id="mem69" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">7</th>
+    							<td id="mem70" class="text-center">00000</td>
+									<td id="mem71" class="text-center">00000</td>
+									<td id="mem72" class="text-center">00000</td>
+									<td id="mem73" class="text-center">00000</td>
+									<td id="mem74" class="text-center">00000</td>
+									<td id="mem75" class="text-center">00000</td>
+									<td id="mem76" class="text-center">00000</td>
+									<td id="mem77" class="text-center">00000</td>
+									<td id="mem78" class="text-center">00000</td>
+									<td id="mem79" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">8</th>
+    							<td id="mem80" class="text-center">00000</td>
+									<td id="mem81" class="text-center">00000</td>
+									<td id="mem82" class="text-center">00000</td>
+									<td id="mem83" class="text-center">00000</td>
+									<td id="mem84" class="text-center">00000</td>
+									<td id="mem85" class="text-center">00000</td>
+									<td id="mem86" class="text-center">00000</td>
+									<td id="mem87" class="text-center">00000</td>
+									<td id="mem88" class="text-center">00000</td>
+									<td id="mem89" class="text-center">00000</td>
+    						</tr>
+    						<tr>
+    							<th scope="row">9</th>
+    							<td id="mem90" class="text-center" >00000</td>
+    							<td id="mem91" class="text-center" >00000</td>
+    							<td id="mem92" class="text-center" >00000</td>
+    							<td id="mem93" class="text-center" >00000</td>
+    							<td id="mem94" class="text-center" >00000</td>
+    							<td id="mem95" class="text-center" >00000</td>
+    							<td id="mem96" class="text-center" >00000</td>
+    							<td id="mem97" class="text-center" >00000</td>
+    							<td id="mem98" class="text-center" >00000</td>
+    							<td id="mem99" class="text-center" >00000</td>
+    							</tr>
+    						</tbody>
+    					</table>
+            </div>
+			
+			<div id="divASM" class="col-sm-1 col-md-1 col-lg-1 col-xs-1">
+			  <label>Executável</label>
+							  <textarea class="form-control" name="Executavel" id="textAreaExecutavel" rows="20" ></textarea>
+            </div>
+		  
+		</div>
+
+  </div>
+
+
+</main>
+
+
+	
+
+
+  </body>
+  </html>
